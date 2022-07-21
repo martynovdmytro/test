@@ -46,14 +46,14 @@ class GenreController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the genre by id.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($genre)
+    public function show($id)
     {
-
+        return new GenreResource(Genre::find($id));
     }
 
     /**

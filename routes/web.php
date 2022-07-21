@@ -16,19 +16,24 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::controller(GenreController::class)->group(function (){
+    Route::get('genres', 'index');
+    Route::get('show/genre/{genre:id}', 'show');
+    Route::get('create/genre', 'create');
+    Route::post('store/genre', 'store');
+    Route::get('edit/genre', 'edit');
+    Route::post('edit/genre/{genre:id}', 'update');
+    Route::get('delete/genre', 'destroy');
 
-Route::get('genres', [GenreController::class, 'index']);
-Route::get('show/genre/{genre:id}', [GenreController::class, 'show']);
-Route::get('create/genre', [GenreController::class, 'create']);
-Route::post('store/genre', [GenreController::class, 'store']);
-Route::get('edit/genre', [GenreController::class, 'edit']);
-Route::post('edit/genre/{genre:id}', [GenreController::class, 'update']);
-Route::get('delete/genre', [GenreController::class, 'destroy']);
+});
 
-Route::get('films', [FilmController::class, 'index']);
-Route::get('show/film/{film:id}', [FilmController::class, 'show']);
-Route::get('create/film', [FilmController::class, 'create']);
-Route::post('store/film', [FilmController::class, 'store']);
-Route::get('edit/film', [FilmController::class, 'edit']);
-Route::post('edit/film/{film:id}', [FilmController::class, 'update']);
-Route::get('delete/film', [FilmController::class, 'destroy']);
+Route::controller(FilmController::class)->group(function (){
+    Route::get('films', 'index');
+    Route::get('show/film/{film:id}', 'show');
+    Route::get('create/film', 'create');
+    Route::post('store/film',  'store');
+    Route::get('edit/film',  'edit');
+    Route::post('edit/film/{film:id}',  'update');
+    Route::get('delete/film',  'destroy');
+});
+

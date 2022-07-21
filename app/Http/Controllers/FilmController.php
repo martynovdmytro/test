@@ -6,6 +6,7 @@ use App\Http\Requests\StoreFilmRequest;
 use App\Http\Requests\UpdateFilmRequest;
 use App\Http\Resources\FilmResource;
 use App\Models\Film;
+use App\Models\Genre;
 use Illuminate\Support\Facades\DB;
 
 class FilmController extends Controller
@@ -27,7 +28,9 @@ class FilmController extends Controller
      */
     public function create()
     {
-        return view('components.forms.film-form-create');
+        return view('components.forms.film-form-create', [
+            'genres' => Genre::all()
+        ]);
     }
 
     /**
@@ -40,9 +43,15 @@ class FilmController extends Controller
     {
         $attributes = $request->validated();
 
-//        return view('test', [
-//            'film' => request()->boolean()
-//        ]);
+        if (request()->input('status') !== null) {
+            $attributes['status'] = true;
+        } else {
+            $attributes['status'] = false;
+        }
+
+        foreach (request()->input('genres') as $genre) {
+            $genres = Genre::all()->where('name', $genre);
+        }
 
         if (request()->file('image') !== null) {
             $attributes['image'] = request()->file('image')->store('image');
@@ -50,20 +59,27 @@ class FilmController extends Controller
             $attributes['image'] = 'http://via.placeholder.com/640x360';
         }
 
-        Film::create($attributes);
+        $filmId = DB::table('films')->insertGetId($attributes);
+
+        foreach ($genres as $genre) {
+            DB::table('film_genre')->insert([
+                'film_id' => $filmId,
+                'genre_id' => $genre->id
+            ]);
+        }
 
         return back();
     }
 
     /**
-     * Display the specified resource.
+     * Display the film by id.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        //
+        return new FilmResource(Film::find($id));
     }
 
     /**

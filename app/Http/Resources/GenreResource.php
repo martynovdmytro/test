@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Film;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class GenreResource extends JsonResource
@@ -17,6 +18,7 @@ class GenreResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'films' => $this->films
         ];
     }
 }
